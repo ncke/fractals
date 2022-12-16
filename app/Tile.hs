@@ -1,6 +1,8 @@
 module Tile 
 ( Tile
+, Tile.length
 , generate
+, element
 , tessellate
 ) where
 
@@ -10,6 +12,9 @@ data Tile a = Tile
   { region :: Region 
   , elements :: [[Maybe a]]
   }
+
+length :: Tile a -> Int
+length tile = sum (map Prelude.length (elements tile))
 
 generate :: Region -> (Int -> Int -> a) -> Tile a
 generate region generator =
