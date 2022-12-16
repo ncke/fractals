@@ -1,0 +1,51 @@
+cabal-version:      2.4
+name:               mandelbrot
+version:            0.1.0.0
+
+-- A short (one-line) description of the package.
+-- synopsis:
+
+-- A longer description of the package.
+-- description:
+
+-- A URL where users can report bugs.
+-- bug-reports:
+
+-- The license under which the package is released.
+-- license:
+author:             Nick Everitt
+maintainer:         nicholaseveritt@gmail.com
+
+-- A copyright notice.
+-- copyright:
+-- category:
+extra-source-files: CHANGELOG.md
+
+executable mandelbrot
+    main-is:          Main.hs
+
+    -- Modules included in this executable, other than Main.
+    other-modules:    Region
+                      Configuration
+                      Tile
+                      Box
+
+
+    -- LANGUAGE extensions used by modules in this package.
+    -- other-extensions:
+    build-depends:    base ^>=4.17.0.0
+                      --QuickCheck >= 2.0
+
+    hs-source-dirs:   app
+    default-language: Haskell2010
+
+Test-Suite mandelbrot-tests
+    Type:             exitcode-stdio-1.0
+    
+    Main-is:          Tests.hs
+
+    Other-modules:    Region
+
+    Build-depends:    base, QuickCheck, HUnit
+    Hs-source-dirs:   app, test
+    Default-language: Haskell2010
