@@ -1,6 +1,6 @@
 module Region
 ( Region(..)
-, bounding
+, enclosing
 ) where
 
 data Region = Region
@@ -41,7 +41,7 @@ extentLocation extent = (xMin extent, yMin extent)
 extentSize :: Extent -> (Int, Int)
 extentSize extent = (xMax extent - xMin extent, yMax extent - yMin extent)
 
-bounding :: Region -> Region -> Region
-bounding a b =
+enclosing :: Region -> Region -> Region
+enclosing a b =
   Region { location = extentLocation enclosure, size = extentSize enclosure }
   where enclosure = merge (extent a) (extent b) 

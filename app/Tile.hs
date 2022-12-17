@@ -3,7 +3,9 @@ module Tile
 , Tile.length
 , generate
 , element
+, translate
 , tessellate
+, show
 ) where
 
 import Region
@@ -25,26 +27,27 @@ generate region generator =
     szX = fst (size region)
     szY = snd (size region)
     gen x y = Just (generator (orX + x) (orY + y))
-    elements = map (\x -> map (gen x) [0..szY - 1]) [0..szX - 1]
+    elements = map (\y -> map (\x -> gen x y) [0..szX - 1]) [0..szY - 1]
 
 element :: Tile a -> (Int, Int) -> Maybe a
-element tile coord = elements tile !! fst coord !! snd coord
+element tile (x, y) = elements tile !! y !! x
 
 translate :: Region -> Tile a -> Tile a
-translate dest input =
-  Tile { region = dest, elements = elements }
+translate destRegion sourceTile =
+  Tile { region = destRegion, elements = elements }
   where
-    orX = fst (location dest)
-    orY = snd (location dest)
-    szX = fst (size dest)
-    szY = snd (size dest)
-    inputRegion = region input
-    inputLocn = location inputRegion
-    inputSize = size inputRegion
-    isLegal (x, y) = x >= 0 && y >= 0 && x < fst inputSize && y < snd inputSize
-    original (x, y) = (x + orX - fst (location (region input)), y + orY - snd (location (region input)))
-    copy x y = if isLegal coord' then element input coord' else Nothing where coord' = original (x, y)
-    elements = map (\x -> map (copy x) [0..szY - 1]) [0..szX - 1]
+    (dstOrX, dstOrY) = location destRegion
+    (dstSzX, dstSzY) = size destRegion
+    srcRegion = region sourceTile
+    (srcOrX, srcOrY) = location srcRegion
+    (srcSzX, srcSzY) = size srcRegion
+    isLegal (x, y) = x >= 0 && y >= 0 && x < srcSzX && y < srcSzY
+    original (x, y) = (x + dstOrX - srcOrX, y + dstOrY - srcOrY)
+    copy x y = if isLegal coord' 
+               then element sourceTile coord' 
+               else Nothing 
+               where coord' = original (x, y)
+    elements = map (\y -> map (\x -> copy x y) [0..dstSzX - 1]) [0..dstSzY - 1]
 
 select :: Maybe a -> Maybe a -> Maybe a
 select aElement bElement =
@@ -54,15 +57,15 @@ select aElement bElement =
 
 tessellation :: Tile a -> Tile a -> Tile a
 tessellation i j =
-  Tile { region = reg, elements = elements }
+  Tile { region = enc, elements = elements }
   where
-    reg = bounding (region i) (region j)
-    iTranslated = translate reg i
-    jTranslated = translate reg j
-    szX = fst (size reg)
-    szY = snd (size reg)
-    select' x y = select (element iTranslated coord') (element jTranslated coord') where coord' = (x, y)
-    elements = map (\x -> map (select' x) [0..szY - 1]) [0..szX - 1]
+    enc = Region.enclosing (region i) (region j)
+    iTr = translate enc i
+    jTr = translate enc j
+    szX = fst (size enc)
+    szY = snd (size enc)
+    sel x y = select (element iTr c) (element jTr c) where c = (x, y)
+    elements = map (\y -> map (\x -> sel x y) [0..szX - 1]) [0..szY - 1]
 
 tessellate :: [Tile a] -> Maybe (Tile a)
 tessellate [] = Nothing
@@ -72,3 +75,16 @@ tessellate (first : rest) = Just (helper first rest)
     helper accum [] = accum
     helper accum (next : rest) = helper (tessellation accum next) rest
 
+instance Show a => Show (Tile a) where
+  show tile = showTile tile
+
+showTile :: Show a => Tile a -> String
+showTile tile =
+  show (location (region tile)) ++ " " ++ show (size (region tile)) ++ "\n"
+  ++ concat (map showLine [0..(snd (size (region tile))) - 1])
+  where
+    padded s = s ++ replicate (4 - Prelude.length s) ' '
+    showElement e = case e of
+      Just value -> padded (Prelude.show value)
+      Nothing    -> padded ("-")
+    showLine i = concat (map showElement (Tile.elements tile !! i)) ++ "\n"
