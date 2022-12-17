@@ -7,41 +7,22 @@ data Region = Region
   { location :: (Int, Int)
   , size :: (Int, Int) 
   }
-
-type Extent = ((Int, Int), (Int, Int))
-
-extent :: Region -> Extent
-extent region = (nearside, farside)
-  where 
-    nearside = location region
-    size' = size region
-    farside = (fst nearside + fst size', snd nearside + snd size')
   
-xMin :: Extent -> Int
-xMin extent = fst (fst extent)
+xMin :: Region -> Int
+xMin region = fst (location region)
 
-yMin :: Extent -> Int
-yMin extent = snd (fst extent)
+yMin :: Region -> Int
+yMin region = snd (location region)
 
-xMax :: Extent -> Int
-xMax extent = fst (snd extent)
+xMax :: Region -> Int
+xMax region = xMin region + fst (size region)
 
-yMax :: Extent -> Int
-yMax extent = snd (snd extent)
-
-merge :: Extent -> Extent -> Extent
-merge a b = (nearside, farside)
-  where
-    nearside = (min (xMin a) (xMin b), min (yMin a) (yMin b))
-    farside = (max (xMax a) (xMax b), max (yMax a) (yMax b))
-
-extentLocation :: Extent -> (Int, Int)
-extentLocation extent = (xMin extent, yMin extent)
-
-extentSize :: Extent -> (Int, Int)
-extentSize extent = (xMax extent - xMin extent, yMax extent - yMin extent)
+yMax :: Region -> Int
+yMax region = yMin region + snd (size region)
 
 enclosing :: Region -> Region -> Region
-enclosing a b =
-  Region { location = extentLocation enclosure, size = extentSize enclosure }
-  where enclosure = merge (extent a) (extent b) 
+enclosing a b = Region { location = locn, size = sz }
+  where
+    locn = (min (xMin a) (xMin b), min (yMin a) (yMin b))
+    farside = (max (xMax a) (xMax b), max (yMax a) (yMax b))
+    sz = (fst farside - fst locn, snd farside - snd locn)
