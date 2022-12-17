@@ -10,7 +10,7 @@ data Configuration = Configuration
   , plotSize :: Complex Double
   , stride :: Double
   , imageSize :: (Int, Int)
-  , maxIterations :: Int 
+  , maxIterations :: Int
   }
 
 mainBulb :: Configuration

@@ -3,6 +3,7 @@ module Main where
 import Data.Complex
 import System.Environment
 
+import Algorithms
 import Configuration
 import Plot
 import Region
@@ -15,12 +16,13 @@ parseArgs args = Configuration
   , plotSize = plotSize
   , stride = stride
   , imageSize = imageSize
-  , maxIterations = 100 }
+  , maxIterations = maxIterations }
   where
     doubs = map (\arg -> read arg :: Double) args
     origin = (doubs !! 0) :+ (doubs !! 1)
     plotSize = (doubs !! 2) :+ (doubs !! 3)
-    imageWidth = doubs !! 4
+    maxIterations = truncate (doubs !! 4)
+    imageWidth = doubs !! 5
     stride = (realPart plotSize) / imageWidth
     imageHeight = (imagPart plotSize) / stride
     imageSize = (truncate imageWidth, truncate imageHeight)
@@ -40,6 +42,6 @@ main :: IO ()
 main = do
   args <- getArgs
   let config = parseArgs args
-  let plt = Plot.plot config
+  let plt = Plot.plot Algorithms.mandelbrot config
   let shd = Shader.shade plt
   putStrLn (render shd)
