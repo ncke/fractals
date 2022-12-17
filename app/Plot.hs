@@ -2,7 +2,7 @@ module Plot
 ( plot
 ) where
 
-import Data.Complex
+import Data.Complex ( Complex((:+)), imagPart, realPart )
 
 import Configuration
 import Region

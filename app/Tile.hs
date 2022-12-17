@@ -3,6 +3,7 @@ module Tile
 , Tile.length
 , generate
 , element
+, region
 , translate
 , tessellate
 , show

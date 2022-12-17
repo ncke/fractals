@@ -2,8 +2,11 @@ module Main where
 
 import Data.Complex
 import System.Environment
+
 import Configuration
+import Plot
 import Region
+import Shader
 import Tile
 
 parseArgs :: [String] -> Configuration
@@ -22,12 +25,21 @@ parseArgs args = Configuration
     imageHeight = (imagPart plotSize) / stride
     imageSize = (truncate imageWidth, truncate imageHeight)
 
-globalRegion :: Configuration -> Region
-globalRegion config = Region { location = (0, 0), size = imageSize config }
+render :: Tile (Int, Int, Int) -> String
+render tile =
+  "P3\n" ++ show sx ++ " " ++ show sy ++ "\n255\n" ++ pixels
+  where
+    (sx, sy) = size (Tile.region tile)
+    rgb (r, g, b) = show r ++ " " ++ show g ++ " " ++ show b ++ "\n"
+    pixel x y = case Tile.element tile (x, y) of
+      Just px -> rgb px
+      otherwise -> "255 255 255\n"
+    pixels = concat (map (\y -> concat (map (\x -> pixel x y) [0..sx-1])) [0..sy-1])
 
 main :: IO ()
 main = do
   args <- getArgs
   let config = parseArgs args
-
-  putStrLn "Hello, Haskell!"
+  let plt = Plot.plot config
+  let shd = Shader.shade plt
+  putStrLn (render shd)
