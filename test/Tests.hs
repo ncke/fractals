@@ -29,13 +29,25 @@ prop_tileGenerate locn (xSize, ySize) =
     genr x y = x + y
     tile = Tile.generate reg genr
 
-prop_tileElement :: Int -> Int -> Property
-prop_tileElement x y =
+prop_tileElement :: (Int, Int) -> Property
+prop_tileElement (x, y) =
   (x >= 0 && x < 100 && y >= 0 && y <= 100) ==> Tile.element tile (x, y) == Just (x + y)
   where
     reg = Region { location = (0,0), size = (100, 100) }
     genr x y = x + y
     tile = Tile.generate reg genr
+
+prop_tileTranslate :: (Int, Int) -> (Int, Int) -> (Int, Int) -> (Int, Int) -> Property
+prop_tileTranslate (lxDest, lyDest) (sxDest, syDest) (lxOrig, lyOrig) (sxOrig, syOrig) =
+  (lxDest >= 0 && lxDest < 100 && lyDest >= 0 && lyDest < 100 && lxOrig >= lxDest && lyOrig >= lyDest && (lxOrig + sxOrig) <= (lxDest + sxDest) && (lyOrig + syOrig) <= (lyDest + sxDest))
+    ==> Tile.element tltn ()
+  where
+    dest = Region { location = (lxDest, lyDest), size = (sxDest, syDest) }
+    orig = Region { location = (lxOrig, lyOrig), size = (sxOrig, syOrig) }
+    genr x y = x + y
+    tile = Tile.generate orig genr
+    tltn = Tile.translate dest tile
+
 
 main :: IO ()
 main = do
