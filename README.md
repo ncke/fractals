@@ -33,13 +33,21 @@ The second observation has to do with the fact that the complex plane extends in
 
 Figure 1 shows the Mandelbrot set in the complex plane and highlights some arbitrary locations. Points that are inside the set are conventionally coloured black, the membership test is described below. In this diagram the points that are outside the set are coloured white, later on we discuss how to shade these points to produce colourful plots.
 
+## How it works.
 
+#### Plotting.
 
+#### Shading.
 
+#### Rendering an image.
 
+The final step is to render the shaded tile into an image. The image is created in the p3 (.ppm) format which is text-based, and echoed to the standard output.
 
+## Improving plotting performance.
 
+## Improving the shader.
 
+## Examples.
 
 ## References.
 
