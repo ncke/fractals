@@ -2,6 +2,9 @@
 Messing about plotting fractals with Haskell.
 
 ![Main bulb of the Mandelbrot set](https://github.com/ncke/fractals/blob/c817a10e9ed66f838480e6a9e04c54699479f8a0/examples/mainbulb-900x900.png)
+
+`mandelbrot -2.0 -1.25 2.5 2.5 250 900 > op.ppm`
+
 ## What are fractals?
 Fractals are a kind of shape. Unlike ordinary shapes, like squares and circles, a fractal has the property of self-similarity. This means that no matter how deeply you zoom in on some part of the fractal, the original motif continues to emerge at an ever smaller scale.
 
