@@ -9,8 +9,9 @@ shader :: Tile Int -> Int -> Int -> (Int, Int, Int)
 shader input ix iy =
   case elem of
     Just 0 -> (0,0,0)
-    Just n -> (min 255 (n * 9), 0, 0)
-    otherwise -> (255, 255, 255)
+    Just 255 -> (255, 255, 255)
+    Just n -> (min 254 (n * 9), 0, 0)
+    otherwise -> (0, 255, 0)
   where
     elem = element input (ix, iy)
 

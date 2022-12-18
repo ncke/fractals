@@ -11,6 +11,7 @@ data Configuration = Configuration
   , stride :: Double
   , imageSize :: (Int, Int)
   , maxIterations :: Int
+  , isConnected :: Bool
   }
 
 mainBulb :: Configuration
@@ -20,4 +21,5 @@ mainBulb = Configuration
   , stride = 0.125 -- 20 pts
   , imageSize = (20, 20)
   , maxIterations = 100
+  , isConnected = True
   }

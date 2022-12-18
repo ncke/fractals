@@ -68,9 +68,8 @@ tessellation i j =
     sel x y = select (element iTr c) (element jTr c) where c = (x, y)
     elements = map (\y -> map (\x -> sel x y) [0..szX - 1]) [0..szY - 1]
 
-tessellate :: [Tile a] -> Maybe (Tile a)
-tessellate [] = Nothing
-tessellate (first : rest) = Just (helper first rest)
+tessellate :: [Tile a] -> Tile a
+tessellate (first : rest) = helper first rest
   where
     helper :: Tile a -> [Tile a] -> Tile a
     helper accum [] = accum

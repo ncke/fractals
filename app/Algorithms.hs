@@ -1,5 +1,8 @@
 module Algorithms 
 ( mandelbrot
+, fill
+, boxedFill
+, boxedMandelbrot
 , Algorithm
 ) where
 
@@ -9,17 +12,32 @@ import Configuration
 
 type Algorithm = Configuration -> Int -> Int -> Int
 
+mandelbrotEscapeIts :: Int -> Complex Double -> Int -> Complex Double -> Int
+mandelbrotEscapeIts maxIts c n z =
+  if n >= maxIts then 0 -- did not escape within maxits iterations.
+  else if outsideBounds then n -- escaped after n iterations.
+  else mandelbrotEscapeIts maxIts c (n + 1) (z * z + c) -- still orbiting.
+  where
+    sq a = a * a
+    outsideBounds = sq (realPart z) + sq (imagPart z) > 4.0
+
 mandelbrot :: Algorithm
 mandelbrot config ix iy =
-  recur 0 (0 :+ 0)
+  mandelbrotEscapeIts (maxIterations config) point 0 (0 :+ 0)
   where
-    maxits = maxIterations config
-    offset = (fromIntegral ix) * stride config :+ (fromIntegral iy) * stride config
-    start = origin config + offset
-    recur n posn = if n >= maxits then 0
-                   else if outsideBounds then n 
-                   else recur (n + 1) newposn
-      where
-        sq a = a * a
-        outsideBounds = sq (realPart posn) + sq (imagPart posn) > 4.0
-        newposn = sq posn + start
+    stride = Configuration.stride config
+    offset = (fromIntegral ix) * stride :+ (fromIntegral iy) * stride
+    point = origin config + offset
+
+fill :: Algorithm
+fill config ix iy = 0
+
+boxedFill :: Int -> Int -> Algorithm
+boxedFill bx by config ix iy = if ix == bx || iy == by then 255 else 0
+
+boxedMandelbrot :: Int -> Int -> Algorithm
+boxedMandelbrot bx by config ix iy = 
+  if ix == bx || iy == by 
+  then 255
+  else mandelbrot config ix iy
+  

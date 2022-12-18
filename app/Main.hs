@@ -16,7 +16,8 @@ parseArgs args = Configuration
   , plotSize = plotSize
   , stride = stride
   , imageSize = imageSize
-  , maxIterations = maxIterations }
+  , maxIterations = maxIterations
+  , isConnected = True }
   where
     doubs = map (\arg -> read arg :: Double) args
     origin = (doubs !! 0) :+ (doubs !! 1)
