@@ -76,13 +76,13 @@ So how does this work for the Mandelbrot set in the complex plane. The `Tile` is
 
 The first thing to do is convert from the integer coordinates that we have been given by the tile into a position in the complex plane. We have a `Configuration` instance to guide us. Figure 3 below shows the general idea. We know, from the configuration, the complex coordinate for the lower right hand corner, in this example it is -2.0 - 1.25i and the size here is 2.0 + 2.0i; and we are also given the overall image size in pixels. So for any given x-y pair we can use linear interpolation to work out  the corresponding position in the complex plane.
 
-![Linear interpolation to the complex plane](https://github.com/ncke/fractals/blob/bb3a727447ac90038eb9ac2508f24b194f7baed5/resources/figure-3.png)
+![Linear interpolation to the complex plane](https://github.com/ncke/fractals/blob/ef970f3ecec8fe230ed4d77ca9b98b8f278729eb/resources/figure-3.png)
 
 **Figure 3.** (a) How the tile sees it, a 20x20 grid of points with (5, 14) highlighted. (b) How the Mandelbrot strategy uses the plot’s configuration data structure to map to -1.375 + 0.5i in the complex plane. For the real part, 5 * 2.5 / 20 = 0.625, and for the imaginary part 14 * 2.5i / 14 = 1.75i. Adding this offset to the origin at the lower left gives us -1.375 + 0.5i.
 
 Now what? We’ve got our complex number, how do we know whether it is inside the Mandelbrot set or not? The equation is given below at Equation 1. Given the intricacy of the Mandelbrot set, the suprising thing about Equation 1 is how simple it is. That is all it takes to set up a feedback loop that will create an enormously complex shape (infinitely complex, in fact). This chaos from concision is one of the reasons why the Mandelbrot set is admired by mathematicians.
 
-![Mandelbrot set](https://github.com/ncke/fractals/blob/bb3a727447ac90038eb9ac2508f24b194f7baed5/resources/equation-1.png)
+![Mandelbrot set](https://github.com/ncke/fractals/blob/ef970f3ecec8fe230ed4d77ca9b98b8f278729eb/resources/equation-1.png)
 
 
 
