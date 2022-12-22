@@ -151,6 +151,79 @@ Actually though, there's a much better trick that we can also employ to speed th
 
 ## Improving plotting performance.
 
+Mathematicians assure us that the Mandelbrot set is connected. Adrien Douady and John Hubbard proved this using complex analysis in 1982 [4], also there is also a 2001 topological proof by Jeremy Khan [5]. Indeed, one of the topological implications of connectedness is that the Mandelbrot set has no holes. If you look at Figure 1, then you will see the black islands of the set surrounded by a sea of colour; but you will never find a sea of colour inside a black island. Another way of putting that is that if you can draw a box anywhere on the plot. If all the points at the edge of box are in the Mandelbrot set (black), then all the points inside the box are also in the Mandelbrot set,
+
+We can use this ‘box-ability’ to our advantage. Plotting points that are inside the Mandelbrot set is computationally expensive because each point has to run fully to the maximum iteration limit. But if we draw a box and find that all points on the edge are inside the set then there’s no need to compute the interior points — we can immediately mark them as set members. If, however, we find a single non-member point on the edge then all bets are off. We must either explicitly compute all of the interior points, or subdivide the box into smaller segments and try again. Say that we draw a 200 x 200 box and find that all of the edge points are in the Mandelbrot set, with a 250 iteration limit, that test would cost us 200 thousand iterations and it allows us to avoid 10 million iterations for full computation. The test is O(n) while full computation is O(n<sup>2</sup>). In an ideal world, even the work done to compute the test points would be reused for the interior computation (if necessary) although this is not currently implemented.
+
+To exploit this mathematical property we introduce the ‘quad plot’. When given a region to plot we first apply the box test. If the test succeeds we generate a tile using the `Algorithm.fill` strategy because we know that all interior points are in the set. If the test fails then we check to see if the region width is less than 20 pixels, if so we use `Algorithm.mandelbrot` to compute all of the interior points. If it’s larger then we divide the region into four quadrants and repeat the process for each smaller area.
+
+Here’s the code:
+
+```haskell
+plot :: Algorithm -> Configuration -> Tile Int
+plot algo config =
+  if Configuration.isConnected config 
+  then quadPlot algo config global
+  else Tile.generate global (algo config)
+  where
+    global = Region { location = (0,0), size = imageSize config }
+
+quadPlot :: Algorithm -> Configuration -> Region -> Tile Int
+quadPlot algo config region =
+  if Box.isInterior algo config region
+  then Tile.generate region (Algorithms.fill config)
+  else if fst (size region) < 20 then Tile.generate region (algo config)
+  else tessellate (map (quadPlot algo config) (quadrants region))
+```
+
+This is  going to improve our  time efficiency in most cases, but what about space efficiency? Each of those quadrants is trying to populate a portion of the bigger tile; and each quadrant can itself be divided into smaller quadrants. If that recursion reaches five deep then there will 1,024 (4<sup>5</sup>) quadrants. Instead of allowing each quadrant to write to its own copy of the full tile, we give each quadrant a tile sized for its smaller region. The `Tile` module has a `tessellate`  function that can merge two or more tiles together to form a larger tile that is just big enough to hold them all. Figure 5(a) shows an individual 5x5 quadrant that has been populated the the character ‘A’ for demonstration purposes. In figure 5(b) that quadrant has been tessellated with four others into a 10x10 quadrant. After the individual quadrants have been tessellated they will be subjected to the tender mercy of the garbage collector.
+
+```
+(10,10) (5,5)
+'A' 'A' 'A' 'A' 'A'
+'A' 'A' 'A' 'A' 'A'
+'A' 'A' 'A' 'A' 'A'
+'A' 'A' 'A' 'A' 'A'
+'A' 'A' 'A' 'A' 'A'
+```
+**Figure 5(a).** An individual 5x5 tile.
+
+```
+Tile.tessellate [tile1, tile2, tile3, tile4]
+
+(10,10) (10,10)
+'A' 'A' 'A' 'A' 'A' 'C' 'C' 'C' 'C' 'C'
+'A' 'A' 'A' 'A' 'A' 'C' 'C' 'C' 'C' 'C'
+'A' 'A' 'A' 'A' 'A' 'C' 'C' 'C' 'C' 'C'
+'A' 'A' 'A' 'A' 'A' 'C' 'C' 'C' 'C' 'C'
+'A' 'A' 'A' 'A' 'A' 'C' 'C' 'C' 'C' 'C'
+'B' 'B' 'B' 'B' 'B' 'D' 'D' 'D' 'D' 'D'
+'B' 'B' 'B' 'B' 'B' 'D' 'D' 'D' 'D' 'D'
+'B' 'B' 'B' 'B' 'B' 'D' 'D' 'D' 'D' 'D'
+'B' 'B' 'B' 'B' 'B' 'D' 'D' 'D' 'D' 'D'
+'B' 'B' 'B' 'B' 'B' 'D' 'D' 'D' 'D' 'D'
+```
+**Figure 5(b).** Four 5x5 tiles tessellated to form a 10x10 tile.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Shading.
 
 ## Improving the shader.
@@ -163,4 +236,8 @@ Actually though, there's a much better trick that we can also employ to speed th
 
 [2] Mandelbrot, B. B. (1982) ‘The Fractal Geometry of Nature’, W. H. Freeman & Co.: New York.
 
-[3] ToyViewer.
+[3] Ogihara, T. (n.d.) 'ToyViewer: Image viewer with utilities'. Available at https://apps.apple.com/us/app/toyviewer/id414298354.
+
+[4] Douady, A., and Hubbard, J. H. (1982) ‘Itération des polynômes quadratiques complexes’, C. R. Acad. Sci. Paris Sér. I Math., 294(3), pp. 123-126.
+
+[5] Khan, J. (2001) ‘The Mandelbrot Set is Connected: a Topological Proof’. Available at https://www.math.brown.edu/jk17/mconn.pdf.
