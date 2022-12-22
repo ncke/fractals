@@ -36,15 +36,11 @@ Figure 1 shows the Mandelbrot set in the complex plane. Points that are members 
 
 ## How it works.
 
-{% note %}
-
 👉 **Disclaimer.** I’m not an Haskell expert, I’m a beginner. I’m teaching myself Haskell because I think that functional languages are ace and because I think that learning to express yourself in different programming languages helps you to write better code overall.
-
-{% endnote %}
 
 The `Main` function implements a four-step process, shown in Figure 2 below.
 
-<img src="https://github.com/ncke/fractals/blob/bb3a727447ac90038eb9ac2508f24b194f7baed5/resources/figure-2.png" width=300>
+<img src="https://github.com/ncke/fractals/blob/bb3a727447ac90038eb9ac2508f24b194f7baed5/resources/figure-2.png" width=500>
 
 **Figure 2.** The four-step process of producing a fractal.
 
