@@ -78,9 +78,11 @@ The first thing to do is convert from the integer coordinates that we have been 
 
 ![Linear interpolation to the complex plane](https://github.com/ncke/fractals/blob/bb3a727447ac90038eb9ac2508f24b194f7baed5/resources/figure-3.png)
 
-**Figure 3.** (a) How the tile sees it, a 20x20 grid of points with (5, 14) highlighted. (b) How the Mandelbrot strategy uses the plot’s configuration data structure to map to -1.375 + 0.5i in the complex plane. 
+**Figure 3.** (a) How the tile sees it, a 20x20 grid of points with (5, 14) highlighted. (b) How the Mandelbrot strategy uses the plot’s configuration data structure to map to -1.375 + 0.5i in the complex plane. For the real part, 5 * 2.5 / 20 = 0.625, and for the imaginary part 14 * 2.5i / 14 = 1.75i. Adding this offset to the origin at the lower left gives us -1.375 + 0.5i.
 
-Now what? We’ve got our complex number, how do we know whether it is inside the Mandelbrot set or not?
+Now what? We’ve got our complex number, how do we know whether it is inside the Mandelbrot set or not? The equation is given below at Equation 1. Given the intricacy of the Mandelbrot set, the suprising thing about Equation 1 is how simple it is. That is all it takes to set up a feedback loop that will create an enormously complex shape (infinitely complex, in fact). This chaos from concision is one of the reasons why the Mandelbrot set is admired by mathematicians.
+
+![Mandelbrot set](https://github.com/ncke/fractals/blob/bb3a727447ac90038eb9ac2508f24b194f7baed5/resources/equation-1.png)
 
 
 
