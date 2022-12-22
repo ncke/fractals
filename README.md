@@ -35,7 +35,12 @@ The second observation has to do with the fact that the complex plane extends in
 Figure 1 shows the Mandelbrot set in the complex plane. Points that are members of the set are conventionally coloured black; and the membership test is described below. In this figure the points that are outside the set are shaded red, later on we discuss how to shade these points to produce more colourful plots.
 
 ## How it works.
-::**Disclaimer.** I’m not an Haskell expert, I’m a beginner. I’m teaching myself Haskell because I think that functional languages are ace and because I think that learning to express yourself in different programming languages helps you to write better code overall.::
+
+{% note %}
+
+👉 **Disclaimer.** I’m not an Haskell expert, I’m a beginner. I’m teaching myself Haskell because I think that functional languages are ace and because I think that learning to express yourself in different programming languages helps you to write better code overall.
+
+{% endnote %}
 
 The `Main` function implements a four-step process, shown in Figure 2 below.
 
