@@ -11,10 +11,15 @@ Messing about plotting fractals with Haskell.
 `mandelbrot XORIG YORIG WIDTH HEIGHT MAXITS PIXELS` streams P3 format image data to the standard output.
 
 `XORIG`  the x-coordinate of the lower-left corner of the region to be plotted in the complex plane.
+
 `YORIG`  the y-coordinate of the lower-left corner of the region.
+
 `WIDTH`  the width of the plot in the complex plane.
+
 `HEIGHT` the height of the plot in the complex plane.
+
 `MAXITS` the maximum number of iterations before assuming set membership.
+
 `PIXELS` the width of the result image in pixels (height is determined to match the aspect ratio of the region).
 
 ## What are fractals?
@@ -210,14 +215,13 @@ We can adapt the shader to highlight the tessellated boxes in an image. Figure 6
 
 **Figure 6.** Using the box-test to improve plotting efficiency.
 
-The box test is implemented in the `Box` module. As a further optimisation, the four corners of the box are tested first. If the corners pass, then each of the edges is tested in full. This approach serves to disqualify a box sooner.
-
+The box test is implemented by the `Box` module. As a further optimisation, the four corners of the box are tested first. If the corners pass, then each of the edges is tested in full. This approach usually serves to disqualify a box sooner. Having mentioned the shader, it's time to look at how we can assign colours to points outside the set.
 
 ## Shading.
 
 ## Improving the shader.
 
-## Examples.
+## A Mandelbrot galaxy.
 
 ## References.
 
