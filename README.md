@@ -205,23 +205,13 @@ Tile.tessellate [tile1, tile2, tile3, tile4]
 ```
 **Figure 5(b).** Four 5x5 tiles tessellated to form a 10x10 tile.
 
+We can adapt the shader to highlight the tessellated boxes in an image. Figure 6 shows the main bulb replotted to show how it is divided into quadrants and sub-quadrants. The smallest box size still predominates, and these are fully plotted. However, the presence of larger boxes demonstrate that significant work has been saved in the most computationally expensive regions.
 
+![Box test](https://github.com/ncke/fractals/blob/ec37b959abf523c1a3d44f1b36f273070c408272/resources/figure-6.png)
 
+**Figure 6.** Using the box-test to improve plotting efficiency.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+The box test is implemented in the `Box` module. As a further optimisation, the four corners of the box are tested first. If the corners pass, then each of the edges is tested in full. This approach serves to disqualify a box sooner.
 
 
 ## Shading.
