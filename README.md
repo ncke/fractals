@@ -39,8 +39,9 @@ Figure 1 shows the Mandelbrot set in the complex plane. Points that are members 
 
 The `Main` function implements a four-step process, shown in Figure 2 below.
 
+![The four-step process to produce a fractal](https://github.com/ncke/fractals/blob/bb3a727447ac90038eb9ac2508f24b194f7baed5/resources/figure-2.png)
 
-Figure 2. The four-step process of producing a fractal.
+**Figure 2.** The four-step process of producing a fractal.
 
 First of all we interpret the command line arguments to set up a `Configuration`. The configuration contains all of the details needed to control the next steps, for example, the coordinates for the region of the complex plane that we want to examine.
 
@@ -73,11 +74,11 @@ The strategy itself has the signature `(Int -> Int -> a)`, this type has actuall
 
 So how does this work for the Mandelbrot set in the complex plane. The `Tile` is going to call our plotting strategy with some x-y Ints, how do we handle that?
 
-The first thing to do is convert from the integer coordinates that we have been given by the tile into a position in the complex plane. We have a `Configuration` instance to guide us. Figure 2 below shows the general idea. We know, from the configuration, the complex coordinate for the lower right hand corner, in this example it is -2.0 - 1.25i and the size here is 2.0 + 2.0i; and we are also given the overall image size in pixels. So for any given x-y pair we can use linear interpolation to work out  the corresponding position in the complex plane.
+The first thing to do is convert from the integer coordinates that we have been given by the tile into a position in the complex plane. We have a `Configuration` instance to guide us. Figure 3 below shows the general idea. We know, from the configuration, the complex coordinate for the lower right hand corner, in this example it is -2.0 - 1.25i and the size here is 2.0 + 2.0i; and we are also given the overall image size in pixels. So for any given x-y pair we can use linear interpolation to work out  the corresponding position in the complex plane.
 
+![Linear interpolation to the complex plane](https://github.com/ncke/fractals/blob/bb3a727447ac90038eb9ac2508f24b194f7baed5/resources/figure-3.png)
 
-
-**Figure 2.** (a) How the tile sees it, a 20x20 grid of points with (5, 14) highlighted. (b) How the Mandelbrot strategy uses the plot’s configuration data structure to map to -1.375 + 0.5i in the complex plane. 
+**Figure 3.** (a) How the tile sees it, a 20x20 grid of points with (5, 14) highlighted. (b) How the Mandelbrot strategy uses the plot’s configuration data structure to map to -1.375 + 0.5i in the complex plane. 
 
 Now what? We’ve got our complex number, how do we know whether it is inside the Mandelbrot set or not?
 
