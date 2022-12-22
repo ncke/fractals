@@ -39,7 +39,7 @@ Figure 1 shows the Mandelbrot set in the complex plane. Points that are members 
 
 The `Main` function implements a four-step process, shown in Figure 2 below.
 
-![The four-step process to produce a fractal](https://github.com/ncke/fractals/blob/bb3a727447ac90038eb9ac2508f24b194f7baed5/resources/figure-2.png)
+<img src="https://github.com/ncke/fractals/blob/bb3a727447ac90038eb9ac2508f24b194f7baed5/resources/figure-2.png" width=300>
 
 **Figure 2.** The four-step process of producing a fractal.
 
