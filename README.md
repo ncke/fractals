@@ -90,7 +90,9 @@ Remember that, for plotting, we want to get a `Tile Int` data type. Where does t
   
 Figure 4 shows how this all works out for our example point at -1.375 + 0.5i. Note that complex numbers have their own special way of performing multiplication and addition, we use `Data.Complex` to handle this for us.
   
-![Iterating a point](https://github.com/ncke/fractals/blob/4d033336e348e9b7d97d5a59e4586222f0a74702/resources/figure-4.png)
+<img src="https://github.com/ncke/fractals/blob/4d033336e348e9b7d97d5a59e4586222f0a74702/resources/figure-4.png" width=600>
+
+**Figure 4.** Tracking successive iterations for the point c = -1.375 + 0.5i until they escape the 2.0-unit radius circle.
 
 In figure 4 we can see that the point escapes after only three iterations, so we can say that this point is not in the Mandelbrot set. We return `n = 3` in this case. Speaking loosely, `n` is like a measure of how 'close' the point is to the set. It provides the basis for shading the chart, as we'll see later.
   
