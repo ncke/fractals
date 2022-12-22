@@ -165,8 +165,7 @@ plot algo config =
   if Configuration.isConnected config 
   then quadPlot algo config global
   else Tile.generate global (algo config)
-  where
-    global = Region { location = (0,0), size = imageSize config }
+  where global = Region { location = (0,0), size = imageSize config }
 
 quadPlot :: Algorithm -> Configuration -> Region -> Tile Int
 quadPlot algo config region =
