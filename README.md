@@ -44,6 +44,18 @@ The `Main` function implements a four-step process, shown in Figure 2 below.
 
 **Figure 2.** The four-step process of producing a fractal.
 
+This is how that looks in code:
+
+```haskell
+main :: IO ()
+main = do
+  args <- getArgs
+  let config = parseArgs args
+  let plt = Plot.plot Algorithms.mandelbrot config
+  let shd = Shader.shade plt
+  putStrLn (render shd)
+```
+
 First of all we interpret the command line arguments to set up a `Configuration`. The configuration contains all of the details needed to control the next steps, for example, the coordinates for the region of the complex plane that we want to examine.
 
 Secondly, we perform the plot itself. At this stage we aren’t thinking about an image or colours. Instead, we concentrate on the mathematics of the fractal itself at each point in the region of interest.
