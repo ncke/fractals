@@ -82,7 +82,9 @@ The first thing to do is convert from the integer coordinates that we have been 
 
 Now what? We’ve got our complex number, how do we know whether it is inside the Mandelbrot set or not? The equation is given below at Equation 1. Given the intricacy of the Mandelbrot set, the suprising thing about Equation 1 is how simple it is. That is all it takes to set up a feedback loop that will create an enormously complex shape (infinitely complex, in fact). This chaos from concision is one of the reasons why the Mandelbrot set is admired by mathematicians.
 
-![Mandelbrot set](https://github.com/ncke/fractals/blob/4d033336e348e9b7d97d5a59e4586222f0a74702/resources/equation-1.png)
+<img src="https://github.com/ncke/fractals/blob/4d033336e348e9b7d97d5a59e4586222f0a74702/resources/equation-1.png" width=300>
+
+**Equation 1.** The Mandelbrot set.
 
 We iterate this equation so that z<sub>0</sub> produces z<sub>1</sub>, which produces z<sub>2</sub>, which produces z<sub>3</sub>, and so forth. The process of iteration always starts at the origin, so z<sub>0</sub> is 0.0 + 0.0i. And c is always constant throughout, it's the point of interest. In our example, c is -1.375 + 0.5i. We carry on iterating to see if z<sub>n</sub> is ever more than 2.0 units away from the origin. If that happens then we know for sure that the point (c) is not in the Mandelbrot set. If a point is in the set then we could carry on iterating forever, z<sub>n</sub> will always orbit the origin and will never fly off. But forever is a long time and we're impatient to see our fractal. So we set an arbitrary maximum limit to the number of iterations that we will make until we just assume that the point is in orbit and therefore in the set. In Figure 1, that limit was 250 iterations.
 
