@@ -207,7 +207,7 @@ Tile.tessellate [tile1, tile2, tile3, tile4]
 
 We can adapt the shader to highlight the tessellated boxes in an image. Figure 6 shows the main bulb replotted to show how it is divided into quadrants and sub-quadrants. The smallest box size still predominates, and these are fully plotted. However, the presence of larger boxes demonstrate that significant work has been saved in the most computationally expensive regions.
 
-![Box test](https://github.com/ncke/fractals/blob/ec37b959abf523c1a3d44f1b36f273070c408272/resources/figure-6.png)
+![Box test](https://github.com/ncke/fractals/blob/f9a6afb404c08be5bc484f5e0c1bdad0961f4d92/resources/figure-6.png)
 
 **Figure 6.** Using the box-test to improve plotting efficiency.
 
