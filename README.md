@@ -82,12 +82,44 @@ The first thing to do is convert from the integer coordinates that we have been 
 
 Now what? We’ve got our complex number, how do we know whether it is inside the Mandelbrot set or not? The equation is given below at Equation 1. Given the intricacy of the Mandelbrot set, the suprising thing about Equation 1 is how simple it is. That is all it takes to set up a feedback loop that will create an enormously complex shape (infinitely complex, in fact). This chaos from concision is one of the reasons why the Mandelbrot set is admired by mathematicians.
 
-![Mandelbrot set](https://github.com/ncke/fractals/blob/ef970f3ecec8fe230ed4d77ca9b98b8f278729eb/resources/equation-1.png)
+![Mandelbrot set](https://github.com/ncke/fractals/blob/4d033336e348e9b7d97d5a59e4586222f0a74702/resources/equation-1.png)
 
+We iterate this equation so that z<sub>0<sub> produces z<sub>1</sub>, which produces z<sub>2</sub>, which produces z<sub>3</sub>, and so forth. The process of iteration always starts at the origin, so z<sub>0</sub> is 0.0 + 0.0i. And c is always constant throughout, it's the point of interest. In our example, c is -1.375 + 0.5i. We carry on iterating to see if z<sub>n</sub> is ever more than 2.0 units away from the origin. If that happens then we know for sure that the point (c) is not in the Mandelbrot set. If a point is in the set then we could carry on iterating forever, z<sub>n</sub> will always orbit the origin and will never fly off. But forever is a long time and we're impatient to see our fractal. So we set an arbitrary maximum limit to the number of iterations that we will make until we just assume that the point is in orbit and therefore in the set. In Figure 1, that limit was 250 iterations.
 
+Remember that, for plotting, we want to get a `Tile Int` data type. Where does the Int come from. If we hit the maximum limit for the number iterations then we populate that with a 0 to say that the point is inside the Mandelbrot set. Otherwise we return the number of iterations that were achieved before the z<sub>n</sub> flew out of orbit beyond 2.0.
+  
+Figure 4 shows how this all works out for our example point at -1.375 + 0.5i. Note that complex numbers have their own special way of performing multiplication and addition, we use `Data.Complex` to handle this for us.
+  
+![Iterating a point](https://github.com/ncke/fractals/blob/4d033336e348e9b7d97d5a59e4586222f0a74702/resources/figure-4.png)
 
+In figure 4 we can see that the point escapes after only three iterations, so we can say that this point is not in the Mandelbrot set. We return `n = 3` in this case. Speaking loosely, `n` is like a measure of how 'close' the point is to the set. It provides the basis for shading the chart, as we'll see later.
+  
+So here's our algorithm in full:
+  
+```haskell
+type Algorithm = Configuration -> Int -> Int -> Int
 
+mandelbrot :: Algorithm
+mandelbrot config ix iy =
+  mandelbrotEscapeIts (maxIterations config) point 0 (0 :+ 0)
+  where
+    stride = Configuration.stride config
+    offset = (fromIntegral ix) * stride :+ (fromIntegral iy) * stride
+    point = (Configuration.origin config) + offset
 
+mandelbrotEscapeIts :: Int -> Complex Double -> Int -> Complex Double -> Int
+mandelbrotEscapeIts maxIts c n z =
+  if n >= maxIts then 0 -- did not escape within maxits iterations.
+  else if outsideBounds then n -- escaped after n iterations.
+  else mandelbrotEscapeIts maxIts c (n + 1) (z * z + c) -- still orbiting.
+  where
+    sq a = a * a
+    outsideBounds = sq (realPart z) + sq (imagPart z) > 4.0
+```
+
+One trick in that last line when we determine whether the point has left orbit. We use the Pythagorean formula to calculate how far the point has moved from the origin, but square roots can be expensive to compute. So we leave the number as a square and compare with 4.0 (which is 2<super>2</super>) which is the same test. This optimisation is necessary. Plotting an 800 x 800 pixel fractal involves testing 640,000 points in the complex plane. Suppose we set the maximum at 250 iterations then, in a worst-case scenario, that's 160 million iterations. In Big O-notation, we would say that the algorithm for plotting an n x n pixel fractal is O(n<super>2</super>) which is pretty fierce considering that we want nice big images.
+
+Actually, there's a much better trick that we can also employ to speed things along. Let's talk about that next.
 
 ## Improving plotting performance.
 
