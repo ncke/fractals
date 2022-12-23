@@ -180,15 +180,15 @@ quadPlot algo config region =
   else tessellate (map (quadPlot algo config) (quadrants region))
 ```
 
-This is  going to improve our  time efficiency in most cases, but what about space efficiency? Each of those quadrants is trying to populate a portion of the bigger tile; and each quadrant can itself be divided into smaller quadrants. If that recursion reaches five deep then there will 1,024 (4<sup>5</sup>) quadrants. Instead of allowing each quadrant to write to its own copy of the full tile, we give each quadrant a tile sized for its smaller region. The `Tile` module has a `tessellate`  function that can merge two or more tiles together to form a larger tile that is just big enough to hold them all. Figure 5(a) shows an individual 5x5 quadrant that has been populated the the character ‘A’ for demonstration purposes. In figure 5(b) that quadrant has been tessellated with four others into a 10x10 quadrant. After the individual quadrants have been tessellated they will be subjected to the tender mercy of the garbage collector.
+This is  going to improve our  time efficiency in most cases, but what about space efficiency? Each of those quadrants is trying to populate a portion of the bigger tile; and each quadrant can itself be divided into smaller quadrants. If that recursion reaches five deep then there will 1,024 (4<sup>5</sup>) quadrants. Instead of allowing each quadrant to write to its own copy of the full tile, we give each quadrant a tile sized for its smaller region. The `Tile` module has a `tessellate`  function that can merge two or more tiles together to form a larger tile that is just big enough to hold them all. Figure 5(a) shows an individual 5x5 quadrant that has been populated for demonstration purposes. In figure 5(b) that quadrant has been tessellated with four others into a 10x10 quadrant. After the individual quadrants have been tessellated they will be subjected to the tender mercy of the garbage collector.
 
 ```
 (10,10) (5,5)
-'A' 'A' 'A' 'A' 'A'
-'A' 'A' 'A' 'A' 'A'
-'A' 'A' 'A' 'A' 'A'
-'A' 'A' 'A' 'A' 'A'
-'A' 'A' 'A' 'A' 'A'
+1  1  1  1  1
+1  1  1  1  1
+1  1  1  1  1
+1  1  1  1  1
+1  1  1  1  1
 ```
 **Figure 5(a).** An individual 5x5 tile.
 
@@ -196,16 +196,16 @@ This is  going to improve our  time efficiency in most cases, but what about spa
 Tile.tessellate [tile1, tile2, tile3, tile4]
 
 (10,10) (10,10)
-'A' 'A' 'A' 'A' 'A' 'C' 'C' 'C' 'C' 'C'
-'A' 'A' 'A' 'A' 'A' 'C' 'C' 'C' 'C' 'C'
-'A' 'A' 'A' 'A' 'A' 'C' 'C' 'C' 'C' 'C'
-'A' 'A' 'A' 'A' 'A' 'C' 'C' 'C' 'C' 'C'
-'A' 'A' 'A' 'A' 'A' 'C' 'C' 'C' 'C' 'C'
-'B' 'B' 'B' 'B' 'B' 'D' 'D' 'D' 'D' 'D'
-'B' 'B' 'B' 'B' 'B' 'D' 'D' 'D' 'D' 'D'
-'B' 'B' 'B' 'B' 'B' 'D' 'D' 'D' 'D' 'D'
-'B' 'B' 'B' 'B' 'B' 'D' 'D' 'D' 'D' 'D'
-'B' 'B' 'B' 'B' 'B' 'D' 'D' 'D' 'D' 'D'
+1  1  1  1  1  2  2  2  2  2
+1  1  1  1  1  2  2  2  2  2
+1  1  1  1  1  2  2  2  2  2
+1  1  1  1  1  2  2  2  2  2
+1  1  1  1  1  2  2  2  2  2
+3  3  3  3  3  4  4  4  4  4
+3  3  3  3  3  4  4  4  4  4
+3  3  3  3  3  4  4  4  4  4
+3  3  3  3  3  4  4  4  4  4
+3  3  3  3  3  4  4  4  4  4
 ```
 **Figure 5(b).** Four 5x5 tiles tessellated to form a 10x10 tile.
 
