@@ -12,6 +12,14 @@ import Configuration
 
 type Algorithm = Configuration -> Int -> Int -> Int
 
+mandelbrot :: Algorithm
+mandelbrot config ix iy =
+  mandelbrotEscapeIts (maxIterations config) point 0 (0 :+ 0)
+  where
+    stride = Configuration.stride config
+    offset = (fromIntegral ix) * stride :+ (fromIntegral iy) * stride
+    point = (Configuration.origin config) + offset
+
 mandelbrotEscapeIts :: Int -> Complex Double -> Int -> Complex Double -> Int
 mandelbrotEscapeIts maxIts c n z =
   if n >= maxIts then 0 -- did not escape within maxits iterations.
@@ -21,13 +29,7 @@ mandelbrotEscapeIts maxIts c n z =
     sq a = a * a
     outsideBounds = sq (realPart z) + sq (imagPart z) > 4.0
 
-mandelbrot :: Algorithm
-mandelbrot config ix iy =
-  mandelbrotEscapeIts (maxIterations config) point 0 (0 :+ 0)
-  where
-    stride = Configuration.stride config
-    offset = (fromIntegral ix) * stride :+ (fromIntegral iy) * stride
-    point = origin config + offset
+
 
 fill :: Algorithm
 fill config ix iy = 0
