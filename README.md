@@ -56,7 +56,7 @@ Figure 1 shows the Mandelbrot set in the complex plane. Points that are members 
 
 The `Main` function implements a four-step process, shown in Figure 2 below.
 
-<img src="https://github.com/ncke/fractals/blob/bb3a727447ac90038eb9ac2508f24b194f7baed5/resources/figure-2.png" width=500>
+<img src="https://github.com/ncke/fractals/blob/bb3a727447ac90038eb9ac2508f24b194f7baed5/resources/figure-2.png" width=600>
 
 **Figure 2.** The four-step process of producing a fractal image.
 
@@ -107,7 +107,7 @@ The first thing to do is convert the integer coordinates that we have been given
 
 ![Linear interpolation to the complex plane](https://github.com/ncke/fractals/blob/ef970f3ecec8fe230ed4d77ca9b98b8f278729eb/resources/figure-3.png)
 
-**Figure 3.** (a) How the tile sees it, a 20x20 grid of points is shown with (5, 14) highlighted. (b) How the Mandelbrot strategy uses the configuration data structure to map onto the complex plane. For the real part, 5 * 2.5 / 20 = 0.625, and for the imaginary part 14 * 2.5i / 14 = 1.75i. Adding this offset to the origin at the lower left gives us -1.375 + 0.5i.
+**Figure 3.** (a) How the tile sees it, a 20x20 grid of points is shown with (5, 14) highlighted. (b) How the Mandelbrot strategy uses the configuration data structure to map onto the complex plane. For the real part, 5 * 2.5 / 20 = 0.625, and for the imaginary part 14 * 2.5i / 20 = 1.75i. Adding this offset to the origin at the lower left gives us -1.375 + 0.5i.
 
 Now what? We’ve got our complex number, how do we know whether it is inside the Mandelbrot set or not? The equation is shown below at Equation 1. Given the intricacy of the Mandelbrot set, the suprising thing about Equation 1 is how simple it is. That is all it takes to set up a feedback loop that will create an enormously complex shape (infinitely complex, in fact). This chaos from concision is one of the reasons why the Mandelbrot set is admired by mathematicians.
 
@@ -180,15 +180,15 @@ quadPlot algo config region =
   else tessellate (map (quadPlot algo config) (quadrants region))
 ```
 
-This is  going to improve our  time efficiency in most cases, but what about space efficiency? Each of those quadrants is trying to populate a portion of the bigger tile; and each quadrant can itself be divided into smaller quadrants. If that recursion reaches five deep then there will 1,024 (4<sup>5</sup>) quadrants. Instead of allowing each quadrant to write to its own copy of the full tile, we give each quadrant a tile sized for its smaller region. The `Tile` module has a `tessellate`  function that can merge two or more tiles together to form a larger tile that is just big enough to hold them all. Figure 5(a) shows an individual 5x5 quadrant that has been populated the the character ‘A’ for demonstration purposes. In figure 5(b) that quadrant has been tessellated with four others into a 10x10 quadrant. After the individual quadrants have been tessellated they will be subjected to the tender mercy of the garbage collector.
+This is  going to improve our  time efficiency in most cases, but what about space efficiency? Each of those quadrants is trying to populate a portion of the bigger tile; and each quadrant can itself be divided into smaller quadrants. If that recursion reaches five deep then there will 1,024 (4<sup>5</sup>) quadrants. Instead of allowing each quadrant to write to its own copy of the full tile, we give each quadrant a tile sized for its smaller region. The `Tile` module has a `tessellate`  function that can merge two or more tiles together to form a larger tile that is just big enough to hold them all. Figure 5(a) shows an individual 5x5 quadrant that has been populated for demonstration purposes. In figure 5(b) that quadrant has been tessellated with four others into a 10x10 quadrant. After the individual quadrants have been tessellated they will be subjected to the tender mercy of the garbage collector.
 
 ```
 (10,10) (5,5)
-'A' 'A' 'A' 'A' 'A'
-'A' 'A' 'A' 'A' 'A'
-'A' 'A' 'A' 'A' 'A'
-'A' 'A' 'A' 'A' 'A'
-'A' 'A' 'A' 'A' 'A'
+1  1  1  1  1
+1  1  1  1  1
+1  1  1  1  1
+1  1  1  1  1
+1  1  1  1  1
 ```
 **Figure 5(a).** An individual 5x5 tile.
 
@@ -196,30 +196,48 @@ This is  going to improve our  time efficiency in most cases, but what about spa
 Tile.tessellate [tile1, tile2, tile3, tile4]
 
 (10,10) (10,10)
-'A' 'A' 'A' 'A' 'A' 'C' 'C' 'C' 'C' 'C'
-'A' 'A' 'A' 'A' 'A' 'C' 'C' 'C' 'C' 'C'
-'A' 'A' 'A' 'A' 'A' 'C' 'C' 'C' 'C' 'C'
-'A' 'A' 'A' 'A' 'A' 'C' 'C' 'C' 'C' 'C'
-'A' 'A' 'A' 'A' 'A' 'C' 'C' 'C' 'C' 'C'
-'B' 'B' 'B' 'B' 'B' 'D' 'D' 'D' 'D' 'D'
-'B' 'B' 'B' 'B' 'B' 'D' 'D' 'D' 'D' 'D'
-'B' 'B' 'B' 'B' 'B' 'D' 'D' 'D' 'D' 'D'
-'B' 'B' 'B' 'B' 'B' 'D' 'D' 'D' 'D' 'D'
-'B' 'B' 'B' 'B' 'B' 'D' 'D' 'D' 'D' 'D'
+1  1  1  1  1  2  2  2  2  2
+1  1  1  1  1  2  2  2  2  2
+1  1  1  1  1  2  2  2  2  2
+1  1  1  1  1  2  2  2  2  2
+1  1  1  1  1  2  2  2  2  2
+3  3  3  3  3  4  4  4  4  4
+3  3  3  3  3  4  4  4  4  4
+3  3  3  3  3  4  4  4  4  4
+3  3  3  3  3  4  4  4  4  4
+3  3  3  3  3  4  4  4  4  4
 ```
 **Figure 5(b).** Four 5x5 tiles tessellated to form a 10x10 tile.
 
 We can adapt the shader to highlight the tessellated boxes in an image. Figure 6 shows the main bulb replotted to show how it is divided into quadrants and sub-quadrants. The smallest box size still predominates, and these are fully plotted. However, the presence of larger boxes demonstrate that significant work has been saved in the most computationally expensive regions.
 
-![Box test](https://github.com/ncke/fractals/blob/f9a6afb404c08be5bc484f5e0c1bdad0961f4d92/resources/figure-6.png)
+![Box test](https://github.com/ncke/fractals/blob/3650000245d73e7f4ae6eeec0b31d2034a67ddad/resources/figure-6.png)
 
 **Figure 6.** Using the box-test to improve plotting efficiency.
 
-The box test is implemented by the `Box` module. As a further optimisation, the four corners of the box are tested first. If the corners pass, then each of the edges is tested in full. This approach usually serves to disqualify a box sooner. Having mentioned the shader, it's time to look at how we can assign colours to points outside the set.
+The box test is implemented by the `Box` module. As a further optimisation, the four corners of the box are tested first. If the corners pass, then each of the edges is tested in full. This corner-led approach usually serves to disqualify a box sooner. Having mentioned the shader, it's time to look at how we can assign colours to points outside the set.
 
 ## Shading.
 
 ## Improving the shader.
+
+## Rendering an image.
+
+Now that we have a tile of RGB-values, the next step is to turn that into an image that we can view. We need to convert the data in the RGB tile into data organised as an image format. The P3 or PPM image format is a human-readable text-based format. This has several advantages: we can inspect the values to spot issues, and we can output text directly from the executable without introducing a third-party dependency to handle the format.
+
+P3 image output looks like this:
+
+```
+P3
+900 900
+255
+103 158 156
+103 158 156
+103 158 156
+...
+```
+
+The first line is a preamble, the next is the image size in terms of width and height, and after that '255' is the maximum colour value. We're outputting 8-bit RGB-values, so 255 is the greatest value we will use for any colour component. The remainder of the file is a list of RGB-values organised row-by-row so that the first-value pertains to the top left pixel and the last value to the bottom-right pixel. As our example image is 900 x 900 pixels in size, there will be 810,000 such values each comprising three integers. The simplicity of P3 comes at the cost of disk space, the 900 x 900 image requires 9 MB of storage while a lossless PNG equivalent needs only 127 kB.
 
 ## A Mandelbrot galaxy.
 
@@ -231,6 +249,6 @@ The box test is implemented by the `Box` module. As a further optimisation, the 
 
 [3] Ogihara, T. (n.d.) 'ToyViewer: Image viewer with utilities'. Available at https://apps.apple.com/us/app/toyviewer/id414298354.
 
-[4] Douady, A., and Hubbard, J. H. (1982) ‘Itération des polynômes quadratiques complexes’, C. R. Acad. Sci. Paris Sér. I Math., 294(3), pp. 123-126.
+[4] Douady, A., and Hubbard, J. H. (1982) ‘Itération des polynômes quadratiques complexes’, C. R. Acad. Sci. Paris Sér. I Math., 294(3), pp. 123-126.
 
 [5] Khan, J. (2001) ‘The Mandelbrot Set is Connected: a Topological Proof’. Available at https://www.math.brown.edu/jk17/mconn.pdf.
