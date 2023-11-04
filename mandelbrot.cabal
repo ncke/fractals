@@ -31,11 +31,13 @@ executable mandelbrot
                       Plot
                       Region
                       Shader
+                      ShaderAlgos
                       Tile
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
-    build-depends:    base ^>=4.17.0.0
+    build-depends:    base ^>=4.17.0.0,
+                      colour
                       --QuickCheck >= 2.0
 
     hs-source-dirs:   app

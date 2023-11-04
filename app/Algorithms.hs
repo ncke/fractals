@@ -29,8 +29,6 @@ mandelbrotEscapeIts maxIts c n z =
     sq a = a * a
     outsideBounds = sq (realPart z) + sq (imagPart z) > 4.0
 
-
-
 fill :: Algorithm
 fill config ix iy = 0
 

@@ -2,20 +2,19 @@ module Shader
 ( shade
 ) where
 
+import ShaderAlgos
 import Tile
 import Region
 
-shader :: Tile Int -> Int -> Int -> (Int, Int, Int)
-shader input ix iy =
+shader :: ShaderAlgo -> Tile Int -> Int -> Int -> (Int, Int, Int)
+shader algo input ix iy =
   case elem of
     Just 0 -> (0,0,0)
-    Just n -> (min 254 (n * 9), 0, 0) 
+    Just n -> algo n 
     otherwise -> (0, 255, 0)
   where
     elem = element input (ix, iy)
 
-shade :: Tile Int -> Tile (Int, Int, Int)
-shade input =
-  Tile.generate (Tile.region input) (shader input)
-  where
+shade :: ShaderAlgo -> Tile Int -> Tile (Int, Int, Int)
+shade algo input = Tile.generate (Tile.region input) (shader algo input)
     

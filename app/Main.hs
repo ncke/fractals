@@ -8,6 +8,7 @@ import Configuration
 import Plot
 import Region
 import Shader
+import ShaderAlgos
 import Tile
 
 parseArgs :: [String] -> Configuration
@@ -44,5 +45,5 @@ main = do
   args <- getArgs
   let config = parseArgs args
   let plt = Plot.plot Algorithms.mandelbrot config
-  let shd = Shader.shade plt
+  let shd = Shader.shade escapeTime plt
   putStrLn (render shd)
