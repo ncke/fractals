@@ -34,7 +34,7 @@ render tile =
   where
     (sx, sy) = size (Tile.region tile)
     rgb (r, g, b) = show r ++ " " ++ show g ++ " " ++ show b ++ "\n"
-    pixel x y = case Tile.element tile (x, y) of
+    pixel x y = case Tile.element tile (x, sy - 1 - y) of
       Just px -> rgb px
       otherwise -> "255 255 255\n"
     pixels = concat (map (\y -> concat (map (\x -> pixel x y) [0..sx-1])) [0..sy-1])
