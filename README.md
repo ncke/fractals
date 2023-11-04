@@ -227,8 +227,11 @@ So, points that are inside the Mandelbrot set are conventionally plotted as blac
 
 One of the simplest ways to map iteration counts to RGB is to pick one of the colour channels (Red, say) and assign the count into that channel. Just make sure that the assigned value doesn't exceed 255 (for 8-bit colour) and we've got a monochromatic aesthetic -- and we can make that black-and-white by assigning the same count to all channels. In fact, that's how Figure 7(a) below was produced.
 
+|(a)       |(b)       |
 |----------|----------|
-|[Figure 7(a)]()|[Figure 7(b)]()|
+|![Figure 7(a)](https://github.com/ncke/fractals/blob/f05d4ea83744d03afac03a7be1742105462411c5/resources/figure-7a.png)|![Figure 7(b)](https://github.com/ncke/fractals/blob/f05d4ea83744d03afac03a7be1742105462411c5/resources/figure-7b.png)|
+
+**Figure 7.** Shading the Mandelbrot main bulb in black and white: (a) RGB is determined by raw iteration count, the RGB is the iteration count scaled by a factor of ten.
 
 If Figure 7(a) looks a little dark, it's because most exterior points leave the 2.0-unit orbit in only a few iterations. These appear almost black and darkness predominates. Only at the edge of the set do points last long enough to make it to brigher whites. We can boost the signal, though. If we multiple each iteration count by a constant (such as, 10) then we brighten those edges making it easier to see the fine tracery -- see Figure 7(b). However, there is a downside: the boundary between iteration counts now becomes visible.
 
