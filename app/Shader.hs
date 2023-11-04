@@ -6,15 +6,16 @@ import ShaderAlgos
 import Tile
 import Region
 
-shader :: ShaderAlgo -> Tile Int -> Int -> Int -> (Int, Int, Int)
-shader algo input ix iy =
+shader :: ShaderAlgo -> Int -> Tile Int -> Int -> Int -> (Int, Int, Int)
+shader algo greatest input ix iy =
   case elem of
     Just 0 -> (0,0,0)
-    Just n -> algo n 
+    Just n -> algo greatest n 
     otherwise -> (0, 255, 0)
   where
     elem = element input (ix, iy)
 
-shade :: ShaderAlgo -> Tile Int -> Tile (Int, Int, Int)
-shade algo input = Tile.generate (Tile.region input) (shader algo input)
+shade :: ShaderAlgo -> Int -> Tile Int -> Tile (Int, Int, Int)
+shade algo greatest input = 
+  Tile.generate (Tile.region input) (shader algo greatest input)
     

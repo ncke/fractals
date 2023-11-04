@@ -1,6 +1,7 @@
 module Tile 
 ( Tile
 , Tile.length
+, greatest
 , generate
 , element
 , region
@@ -88,3 +89,9 @@ showTile tile =
       Just value -> padded (Prelude.show value)
       Nothing    -> padded ("-")
     showLine i = concat (map showElement (Tile.elements tile !! i)) ++ "\n"
+
+greatest :: Ord a => Tile a -> a
+greatest tile = 
+  case concat (elements tile) of
+    [] -> undefined
+    all -> maximum [element | Just element <- all]

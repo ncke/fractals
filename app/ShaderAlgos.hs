@@ -1,5 +1,7 @@
 module ShaderAlgos
-( escapeTime
+( blackAndWhite
+, blueLagoon
+, escapeTime
 , infrared
 , ShaderAlgo
 ) where
@@ -17,16 +19,31 @@ hsv2rgb h s v =
         grn = rounded (channelGreen rgb)
         blu = rounded (channelBlue rgb)
 
-type ShaderAlgo = Int -> (Int, Int, Int)
+type ShaderAlgo = Int -> Int -> (Int, Int, Int)
+
+blackAndWhite :: ShaderAlgo
+blackAndWhite greatest n = 
+    (min 254 n', min 254 n', min 254 n')
+    where
+        n' = n * 10
 
 infrared :: ShaderAlgo
-infrared n = (min 254 (n * 9), 0, 0)
+infrared greatest n = (min 254 (n * 9), 0, 0)
 
 escapeTime :: ShaderAlgo
-escapeTime n =
+escapeTime greatest n =
     hsv2rgb hue sat val
     where
-        scaled = 360 - min 360 (n * 9)
+        scaled = div (n * 360) greatest
         hue = fromIntegral scaled
         sat = 1.0
         val = 1.0
+
+blueLagoon :: ShaderAlgo
+blueLagoon greatest n =
+    hsv2rgb hue sat val
+    where
+        scaled = 240 - (mod n 240)
+        hue = fromIntegral scaled
+        sat = 1.0
+        val = 1.0  

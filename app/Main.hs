@@ -45,5 +45,5 @@ main = do
   args <- getArgs
   let config = parseArgs args
   let plt = Plot.plot Algorithms.mandelbrot config
-  let shd = Shader.shade escapeTime plt
+  let shd = Shader.shade blackAndWhite (greatest plt) plt
   putStrLn (render shd)
