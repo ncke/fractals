@@ -35,3 +35,9 @@ shader input ix iy =
   where
     elem = element input (ix, iy)
 ```
+
+## Interesting places.
+
+Sea-horse valley: `-0.95 0.0 0.4 0.4 1200 900`
+
+Top-knot: `-0.385 0.585 0.55 0.55 1200 900`
