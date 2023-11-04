@@ -231,11 +231,23 @@ One of the simplest ways to map iteration counts to RGB is to pick one of the co
 |----------|----------|
 |![Figure 7(a)](https://github.com/ncke/fractals/blob/f05d4ea83744d03afac03a7be1742105462411c5/resources/figure-7a.png)|![Figure 7(b)](https://github.com/ncke/fractals/blob/f05d4ea83744d03afac03a7be1742105462411c5/resources/figure-7b.png)|
 
-**Figure 7.** Shading the Mandelbrot main bulb in black and white: (a) RGB is determined by raw iteration count, the RGB is the iteration count scaled by a factor of ten.
+**Figure 7.** Shading the Mandelbrot main bulb in black and white: (a) RGB is determined by the raw iteration count, the RGB is the iteration count scaled by a factor of ten.
 
 If Figure 7(a) looks a little dark, it's because most exterior points leave the 2.0-unit orbit in only a few iterations. These appear almost black and darkness predominates. Only at the edge of the set do points last long enough to make it to brigher whites. We can boost the signal, though. If we multiple each iteration count by a constant (such as, 10) then we brighten those edges making it easier to see the fine tracery -- see Figure 7(b). However, there is a downside: the boundary between iteration counts now becomes visible.
 
+In any case, perhaps we can make things more colourful?
+
 ## Improving the shader.
+
+It turns out that there are many many ways of assigning colour values to the Mandelbrot set's exterior region. But they all work in the same way at least at first glance. They all map from an iteration count to an RGB triplet, and for scaling purposes it is useful to know the greatest number of iterations encounted in the plot.
+
+Therefore, given this uniform approach, it makes sense to abstract the colouring algorithm into a type called a `ShaderAlgo`:
+
+```haskell
+type ShaderAlgo = Int -> Int -> (Int, Int, Int)
+```
+
+A `ShaderAlgo` will take 
 
 ## Rendering an image.
 
