@@ -231,9 +231,9 @@ One of the simplest ways to map iteration counts to RGB is to pick one of the co
 |----------|----------|
 |![Figure 7(a)](https://github.com/ncke/fractals/blob/f05d4ea83744d03afac03a7be1742105462411c5/resources/figure-7a.png)|![Figure 7(b)](https://github.com/ncke/fractals/blob/f05d4ea83744d03afac03a7be1742105462411c5/resources/figure-7b.png)|
 
-**Figure 7.** Shading the Mandelbrot main bulb in black and white: (a) RGB is determined by the raw iteration count, the RGB is the iteration count scaled by a factor of ten.
+**Figure 7.** Shading the Mandelbrot main bulb in black and white: in image (a) intensity is determined by the raw iteration count, while in image (b) the intensity is brightened by scaling the iteration count by a factor of ten.
 
-If Figure 7(a) looks a little dark, it's because most exterior points leave the 2.0-unit orbit in only a few iterations. These appear almost black and darkness predominates. Only at the edge of the set do points last long enough to make it to brigher whites. We can boost the signal, though. If we multiple each iteration count by a constant (such as, 10) then we brighten those edges making it easier to see the fine tracery -- see Figure 7(b). However, there is a downside: the boundary between iteration counts now becomes visible.
+If Figure 7(a) looks a little dim, it's because most exterior points leave the 2.0-unit orbit in only a few iterations. These appear almost black and darkness predominates. Only at the edge of the set do points last long enough to make it to brigher whites. We can boost the signal, though. If we multiple each iteration count by a constant (such as, 10) then we brighten those edges making it easier to see the fine tracery -- see Figure 7(b). However, there is a downside: the boundary between iteration counts now becomes visible.
 
 In any case, perhaps we can make things more colourful?
 
