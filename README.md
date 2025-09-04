@@ -23,44 +23,42 @@ Messing about plotting fractals with Haskell.
 `PIXELS` the width of the result image in pixels (height is determined to match the aspect ratio of the region).
 
 ## What are fractals?
-Fractals are a kind of shape. Unlike ordinary shapes, such as squares and circles, a fractal has the property of self-similarity. This means that no matter how deeply you zoom in on some piece of the fractal, the original motif continues to emerge at an ever smaller scale.
+Fractals are a kind of shape. Unlike ordinary shapes, such as squares and circles, a fractal has the property of self-similarity. This means that no matter how deeply you zoom in on some piece of the fractal's edge, the original motif continues to repeat at an ever smaller scale.
 
-One of the reasons why fractals are mathematically interesting is because self-similarity can also be observed in many natural shapes. For example, a satellite view of a coastline will have bays and promontories. But zooming-in reveals a more jagged edge with smaller bays and inlets. This repetition of coastal features at different scales is an example of self-similarity.
+One of the reasons why fractals are interesting is because self-similarity can also be observed in many natural shapes. For example, a satellite view of a coastline will show bays and promontories. But zooming-in reveals a more jagged edge with smaller bays and inlets. This repetition of coastal features at different scales is an example of self-similarity.
 
-The intricacy in the coastline is created by the processes of coastal erosion — the interaction of the waves and wind at the shoreline. The overall shape arises from macroscopic features such as rock types, tidal flows, and prevailing winds. But elaborate details emerge because previous weathering influences future erosion — perhaps channelling water towards or away from a particular section. Even small changes inside these feedback loops will compound across geological timescales to create significant differences.
+The intricacy in a coastline is created by the process of coastal erosion — the interaction of the waves and wind at the shoreline. The overall shape arises from macroscopic features such as rock types, tidal flows, and prevailing winds. But elaborate details emerge because previous this weathering itself influences future erosion — perhaps channelling water towards or away from a particular section. Even small changes inside such feedback loops will compound across geological timescales to create significant differences. Chaos theory is a way of thinking mathematically about these kind of systems.
 
-More dynamic systems, such as the weather, are so sensitive that it is difficult to forecast with accuracy at more than a few days or weeks in advance.  This sensitivity is a part of chaos theory known as the Butterfly Effect, thanks to [Edward Lorenz](https://en.wikipedia.org/wiki/Edward_Norton_Lorenz))’s suggestion that the tiny perturbations caused by a butterfly’s wing could (at least in theory) influence a chain of atmospheric events ending in a hurricane several weeks later.
+More dynamic processes, such as the weather, are so sensitive that it is difficult to forecast with accuracy at more than a few days or weeks in advance.  This sensitivity is known in chaos theory as the Butterfly Effect, thanks to [Edward Lorenz](https://en.wikipedia.org/wiki/Edward_Norton_Lorenz)’s suggestion that the tiny perturbations caused by a butterfly’s wing could (at least in theory) influence a chain of atmospheric events ending in a hurricane several weeks later. Nobody ever suspects the butterfly, until now.
 
 Fractals and chaos theory have changed the way that we think about engineered systems. We are no longer surprised when complex behaviour emerges from interacting components, particularly when a feedback loop is involved. More importantly, it is also fun to generate fractals for ourselves and look at them using our computers.
 
 There’s a lot more information about chaos theory and fractals in James Gleick’s book ‘Chaos: Making a New Science’, which is a classic [1].
 
 ## The Mandelbrot set.
-We have seen that fractals are shapes that are self-similar at many scales, a property sometimes seen in nature. The mathematician [Benoit B. Mandelbrot](https://en.wikipedia.org/wiki/Benoit_Mandelbrot) described many other naturally occurring fractals [2]. He also gave his name to one of the most well-known mathematical fractals: the Mandelbrot set.
+We have heard that fractals are shapes that are self-similar at many scales, a property sometimes seen in nature. The mathematician [Benoit B. Mandelbrot](https://en.wikipedia.org/wiki/Benoit_Mandelbrot) described many other naturally occurring fractals [2]. He also gave his name to one of the most well-known mathematical fractals: the Mandelbrot set.
 
-The Mandelbrot set is a distinctive collection of points in the complex plane. The complex plane exists because of complex numbers, and complex numbers exist to answer the question of how to find the square root of negative one.
-
-For our purposes, the most important thing to know is that a complex number consists of two parts: a real part and an imaginary part. The idea of a number being imaginary is to do with that square root, but we won’t go into that now. We just  need to know how to write a complex number like this:
+The Mandelbrot set is a distinctive collection of points in the complex plane. What is the complex plane? The complex plane exists because of complex numbers, and complex numbers exist to answer the question of how to find the square root of negative one. For our purposes, the most important thing to know is that a complex number consists of two parts: a real part and an imaginary part. The idea of a number being imaginary is to do with that square root, but we won’t go into that here. We just  need to know how to write a complex number like this:
 
   2.5 + 3.2i
 
 The real part of the number is 2.5, and the imaginary part is 3.2. With this in mind we can now make two simplifying observations.
 
-Firstly, the complex plane is two dimensional. Each complex number sits at a position determined by the real part, which is normally measured along the x-axis, and the imaginary part, which is measured along the y-axis. Computer screens are organised in the same way, which is ideal because we can easily map regions of the complex plane into images.
+Firstly, the complex plane is two-dimensional. Each complex number sits at a position determined by the real part, which is normally measured along the x-axis, and the imaginary part, which is measured along the y-axis. Computer screens are organised in the same way, which is ideal because it means we can map regions of the complex plane into images.
 
-The second observation has to do with the fact that the complex plane extends infinitely in all directions; the real and imaginary parts can be as large as you like in both the positive and negative sense. Computer screens are not infinite, despite what you might occasionally see on [r/battlestations](https://www.reddit.com/r/battlestations/comments/11c0so7), so this could be inconvenient. The good news, however, is that no point in the Mandelbrot is more than two units from the origin at 0 + 0i. So that’s okay then.
+The second observation has to do with the fact that the complex plane extends infinitely in all directions; the real and imaginary parts can be as large as you like in both the positive and negative sense. Computer screens are not infinite, despite what you occasionally see on [r/battlestations](https://www.reddit.com/r/battlestations/comments/11c0so7), so this could be inconvenient. The good news, however, is that no point in the Mandelbrot is more than two units from the origin at 0 + 0i. So that’s okay then.
 
 Figure 1 above shows the Mandelbrot set sitting in the complex plane. Points that are members of the set are conventionally coloured black; and the membership test is described below. In this figure the points that are outside the set are shaded red, later on we discuss how to shade these points to produce more colourful plots.
 
 ## How it works.
 
-👉 **Disclaimer.** I’m not an Haskell expert, I’m a beginner. I’m teaching myself Haskell because I think that functional languages are ace and because I think that learning to express yourself in different programming languages helps you to write better code overall (cf, the (Sapir-Whorf Hypothesis)[https://plato.stanford.edu/entries/linguistics/whorfianism.html]).
+👉 **Disclaimer.** I’m not an Haskell expert, I’m a beginner. I’m teaching myself Haskell because I think that functional languages are ace and because I think that learning to express yourself in different programming languages helps you to write better code overall. See also: the [Sapir-Whorf Hypothesis](https://plato.stanford.edu/entries/linguistics/whorfianism.html).
 
-The `Main` function implements a four-step process, shown in Figure 2 below.
+At the top-level `Main` function implements a four-step process, shown in Figure 2 below.
 
 <img src="https://github.com/ncke/fractals/blob/bb3a727447ac90038eb9ac2508f24b194f7baed5/resources/figure-2.png" width=600>
 
-**Figure 2.** The four-step process of producing a fractal image.
+**Figure 2.** A four-step process for producing a fractal image.
 
 This is how that looks in code:
 
@@ -78,22 +76,22 @@ First of all we interpret the command line arguments to set up a `Configuration`
 
 Secondly, we perform the plot itself. At this stage we aren’t thinking about an image format or colours. Instead, we concentrate on the mathematics of the fractal itself at each point in the region of interest.
 
-We have a polymorphic data type called a `Tile a` that stores all of the values in a rectangular area. And, in fact, we have a data type called `Region` that we use to specify exactly where that rectangular area is and its size. Without going into too much detail yet, we now have a populated  `Tile Int`.
+We have a polymorphic data type called `Tile a` that stores all of the values in a rectangular area. And, in fact, we have a data type called `Region` that we use to specify exactly where that rectangular area is and its size. Without going into too much detail yet, we plot to create a populated  `Tile Int`.
 
-In the third stage we shade each of those points. We go back over the tile and generate RGB values which now gives us a `Tile (Int, Int, Int)`.
+In the third stage we shade each of the points in the tile. We go back over the tile and generate RGB values which now gives us a `Tile (Int, Int, Int)`.
 
 The fourth and final step is to render the RGB tile into an image that we can view. For simplicity, and to avoid external dependencies, we use the P3 (.ppm) format. P3 is text-based and uncompressed. This is a little hungry for disk space, but this is not a project about image compression. On a Mac, the Preview app will handle P3 images or we can use a utility like ToyViewer [3].
 
 ## Plotting.
-The most interesting parts of the fractal-producing process are plotting and shading. Let’s discuss plotting first; this is organised in the `Plot` module, but most of the work happens in the `Tile` and `Algorithm` modules.
+The most interesting parts of the fractal-producing process are plotting and shading. Let’s discuss plotting first; the plot is organised by the `Plot` module, but most of the work happens in the `Tile` and `Algorithm` modules.
 
 #### More about tiles.
 
-We already know that we are going to generate a fully populated `Tile Int`.  The tile data type isn’t just a container for Ints. Instead it knows that it is a tile — some bounded rectangular zone in the plane. So it has a `region` property to describe the location, and an `elements` property to hold the actual values. 
+We already know that we are going to generate a fully populated `Tile Int`.  The tile data type isn’t just a container for `Int`s. Instead it knows that it is a tile — some bounded rectangular zone in the plane. So it has a `region` property to describe the location of that zone, and an `elements` property to hold the actual values. 
 
-When you think about it, the properties for the region and the elements in a tile are inextricably linked. We can’t just take the elements from one tile and plonk them together with the region from another tile. At least, if we did do that then the outcome would not be a valid reflection of the reality that we are trying to model. To prevent this, `Tile` is implemented as an abstract data type. We use encapsulation to hide away implementation details as well as to maintain the conceptual purity of a tile. For example, we don’t expose how our storage of the elements is actually arranged. It’s a list of lists, but another programmer doesn’t need to know that, they can just use the `element` function to query for a value at a particular x-y location.
+When you think about it, the properties for the region and the elements in a tile are inextricably linked. We can’t just take the elements from one tile and the region from another tile. At least, if we did do that then the outcome would not be a valid reflection of the reality that we are trying to model. To prevent this, `Tile` is implemented as an abstract data type. We use encapsulation to hide away implementation details as well as to maintain the conceptual purity of a tile. For example, we don’t expose how our storage of the elements is actually arranged. It’s a list of lists, but another programmer doesn’t need to know that, they can just use the `element` function to query for a value at a particular x-y location.
 
-More significantly, we abstract away the process for creating a `Tile` so that the relationship between the region and its elements is enforced. Instead of exposing the initialiser, we provide a `generate` function that must be used to create tiles. The type signature looks like this:
+More significantly, we abstract away the process for creating and populating a `Tile` so that the relationship between the region and its elements is enforced. Instead of exposing the initialiser, we provide a `generate` function that must be used to create tiles. The type signature looks like this:
 
   `generate :: Region -> (Int -> Int -> a) -> Tile a`
 
